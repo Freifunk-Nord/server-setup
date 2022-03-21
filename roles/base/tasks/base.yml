@@ -1,0 +1,38 @@
+---
+
+- name: copy base configs
+  tags: [etc]
+  copy:
+    src: etc/
+    dest: /etc
+
+- name: copy authorized_keys
+  copy:
+    src: authorized_keys
+    dest: /root/.ssh/authorized_keys
+
+
+
+- name: Disable root login with password
+  lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^#?PermitRootLogin"
+    line: "PermitRootLogin prohibit-password"
+
+# configurations and stuff
+- name: set local timezone
+  file:
+    state: link
+    src: /usr/share/zoneinfo/Europe/Berlin
+    dest: /etc/localtime
+
+- name: set locales
+  lineinfile:
+    dest: /etc/locale.gen
+    line: "{{ item }}"
+  loop:
+    - "en_US.UTF-8 UTF-8"
+    - "de_DE.UTF-8 UTF-8"
+
+- name: generate locales
+  command: locale-gen

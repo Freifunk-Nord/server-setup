@@ -1,0 +1,44 @@
+---
+- name: install python3-apt
+  shell:
+    cmd: apt-get install -y python3-apt
+    warn: no
+
+- name: remove packages that are not needed
+  apt:
+    update_cache: yes
+    state: absent
+    name:
+      - cron-apt
+      - mutt
+      - rsyslog
+
+- name: install tools
+  apt:
+    autoremove: yes
+    update_cache: yes
+    state: present
+    name:
+      # necessary packets
+      - git
+      - iproute2
+      - iptables-persistent
+      - openssh-server
+      - apt-file
+      - bridge-utils
+      - curl
+      - dnsutils
+      - htop
+      - iftop
+      - iperf3
+      - iputils-ping
+      - jq
+      - molly-guard
+      - openssh-client
+      - python3-yaml
+      - socat
+      - tcpdump
+      - vim
+      - wget
+      - rsync
+      - nmap

@@ -1,0 +1,5 @@
+---
+
+- name: setup nginx
+  tags: [nginx]
+  import_tasks: nginx.yml

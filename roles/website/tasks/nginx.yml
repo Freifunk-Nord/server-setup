@@ -46,9 +46,7 @@
       with_fileglob: 'nginx/sites/*'
 
 
-- name: check nginx config
-  command:
-    cmd: nginx -t
+
 
 - name: restart nginx
   systemd:

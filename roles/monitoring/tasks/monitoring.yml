@@ -10,19 +10,20 @@
     name: prometheus
 
 - name: copy prometheus config files
+  notify: restart prometheus
   copy:
     src: prometheus
     dest: /etc/
 
 - name: copy defaults config
+  notify: restart prometheus
   copy:
     src: prometheus-default
     dest: /etc/default/prometheus
 
-- name: restart prometheus
+- name: enable prometheus
   systemd:
     enabled: yes
-    state: restarted
     name: prometheus
 
 
@@ -31,9 +32,9 @@
 #
 
 - name: add grafana repo pubkey
-  shell:
-    cmd: wget -q -O - https://packages.grafana.com/gpg.key | apt-key add -
-    warn: false
+  apt_key:
+    url: https://packages.grafana.com/gpg.key
+    state: present
 
 - name: setup grafana repo
   copy:
@@ -47,6 +48,7 @@
     name: grafana
 
 - name: copy defaults config
-  copy:
+  notify: restart grafana
+  template:
     src: grafana.ini
     dest: /etc/grafana/

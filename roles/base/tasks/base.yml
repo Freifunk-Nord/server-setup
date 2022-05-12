@@ -12,12 +12,12 @@
     dest: /root/.ssh/authorized_keys
 
 
-
 - name: Disable root login with password
   lineinfile:
     dest: /etc/ssh/sshd_config
     regexp: "^#?PermitRootLogin"
     line: "PermitRootLogin prohibit-password"
+
 
 # configurations and stuff
 - name: set local timezone
@@ -25,6 +25,7 @@
     state: link
     src: /usr/share/zoneinfo/Europe/Berlin
     dest: /etc/localtime
+
 
 - name: set locales
   lineinfile:
@@ -35,4 +36,5 @@
     - "de_DE.UTF-8 UTF-8"
 
 - name: generate locales
+  changed_when: False
   command: locale-gen

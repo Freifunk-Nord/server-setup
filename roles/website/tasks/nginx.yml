@@ -12,16 +12,19 @@
       - libnginx-mod-http-headers-more-filter
 
 - name: generate dhparams (can take a while)
+  notify: restart nginx
   command:
     cmd: openssl dhparam -out /etc/nginx/dhparam.pem 4096
     creates: /etc/nginx/dhparam.pem
 
 - name: copy snippets
+  notify: restart nginx
   copy:
     src: nginx/snippets
     dest: /etc/nginx/
 
 - name: copy available sites
+  notify: restart nginx
   copy:
     src: "{{ item }}"
     dest: /etc/nginx/sites-available/
@@ -31,27 +34,19 @@
 - name: enable sites
   block:
     - name: remove all enabled sites
+      changed_when: False
       file:
         state: absent
         path: "/etc/nginx/sites-enabled/"
     - name: create enabled-sites directory
+      changed_when: False
       file:
         state: directory
         path: "/etc/nginx/sites-enabled"
     - name: enable selected sites
+      changed_when: False
       file:
         state: link
         src: "../sites-available/{{ item | basename }}"
         dest: "/etc/nginx/sites-enabled/{{ item | basename }}"
       with_fileglob: 'nginx/sites/*'
-
-
-
-
-- name: restart nginx
-  systemd:
-    enabled: true
-    state: restarted
-    name: "{{ item }}"
-  with_items:
-      - nginx

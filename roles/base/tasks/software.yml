@@ -1,5 +1,6 @@
 ---
 - name: install python3-apt
+  changed_when: false
   shell:
     cmd: apt-get install -y python3-apt
     warn: no

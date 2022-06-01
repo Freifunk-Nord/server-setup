@@ -63,17 +63,22 @@ scrape_configs:
 
   - job_name: "blackbox_ping"
     metrics_path: /probe
+    scrape_interval: 15s
+    dns_sd_configs:
+      - names:
+        - "_blackbox._tcp.ffhl.de"
     params:
       module: [icmp]
-    static_configs:
-      - targets:
-        - "google.com"
+      target:
         - "ipv6.google.com"
-        - "1.1.1.1"
+    # static_configs:
+    #   - targets:
+    #     - "blackbox01.ffhl.de:9115"
+    #     - "blackbox02.ffhl.de:9115"
     relabel_configs:
-      - source_labels: [__address__]
-        target_label: __param_target
       - source_labels: [__param_target]
         target_label: target
-      - target_label: __address__
-        replacement: "blackbox.luebeck.freifunk.net:9115"
+      # - source_labels: [__address__]
+      #   target_label: point
+      # - target_label: __address__
+      #   replacement: "blackbox01.luebeck.freifunk.net:9115"

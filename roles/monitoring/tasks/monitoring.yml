@@ -12,8 +12,11 @@
 - name: copy prometheus config files
   notify: restart prometheus
   copy:
-    src: prometheus
-    dest: /etc/
+    src: "prometheus/{{ item }}"
+    dest: /etc/prometheus/
+  loop:
+    - "first_rules.yml"
+    - "prometheus.yml"
 
 - name: copy defaults config
   notify: restart prometheus

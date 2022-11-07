@@ -1,13 +1,5 @@
----
-- hosts: ffnord-web
-  become: true
-  roles:
-    - role: base
-      tags: [base]
-    - role: website
-      tags: [website]
+- name: web
+  import_playbook: web.yml
 
-- hosts: monitoring
-  roles:
-    - role: monitoring
-      tags: [monitoring]
+- name: monitoring
+  import_playbook: web.yml

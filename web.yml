@@ -1,0 +1,8 @@
+---
+- hosts: ffnord-web
+  become: true
+  roles:
+    - role: base
+      tags: [base]
+    - role: website
+      tags: [website]
